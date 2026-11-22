@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Interactive 8:1 multiplexer and 1:8 demultiplexer digital logic simulator with truth tables and circuit diagrams.">
+  <meta name="theme-color" content="#101827">
+  <title>LogicLab | 8:1 MUX & 1:8 DEMUX Simulator</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="LogicLab home"><span class="brand-mark">LL</span><span>LogicLab<small>DIGITAL ELECTRONICS LAB</small></span></a>
+    <nav aria-label="Main navigation">
+      <a href="#simulator">Simulator</a><a href="#theory">Theory</a><a href="#truth-tables">Truth tables</a>
+    </nav>
+    <span class="status"><i></i> Ready to simulate</span>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="eyebrow">INTERACTIVE DIGITAL LOGIC TOOL</div>
+      <h1>Multiplexer &amp;<br><span>Demultiplexer</span> Simulator</h1>
+      <p>Explore how digital data is selected and routed. Change inputs, toggle select lines, and watch the circuit respond instantly.</p>
+      <div class="hero-tags"><span>8:1 MUX</span><span>1:8 DEMUX</span><span>3 SELECT LINES</span><span>LIVE OUTPUT</span></div>
+    </section>
+
+    <section class="workspace" id="simulator">
+      <div class="section-heading">
+        <div><div class="eyebrow">VIRTUAL LAB</div><h2>Choose a circuit</h2></div>
+        <div class="segmented" role="tablist" aria-label="Circuit mode">
+          <button class="mode-btn active" data-mode="mux" role="tab" aria-selected="true">8:1 MUX</button>
+          <button class="mode-btn" data-mode="demux" role="tab" aria-selected="false">1:8 DEMUX</button>
+        </div>
+      </div>
+
+      <div class="sim-grid">
+        <section class="panel controls-panel">
+          <div class="panel-title"><div><span class="step">01</span><h3 id="control-title">Set data inputs</h3></div><button class="text-button" id="reset-btn">Reset</button></div>
+          <div id="mux-controls">
+            <p class="hint">Set each data input to 0 or 1. The selected input is passed to the output.</p>
+            <div class="input-grid" id="input-grid"></div>
+          </div>
+          <div id="demux-controls" hidden>
+            <p class="hint">Set the single data input. It is routed to the output selected by S2, S1 and S0.</p>
+            <div class="single-input-control">
+              <label for="demux-data">Data input D</label>
+              <button class="bit-toggle large" id="demux-data" aria-label="Toggle data input" aria-pressed="0">0</button>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="panel-title"><div><span class="step">02</span><h3>Select a channel</h3></div><span class="mini-label">3-BIT SELECT</span></div>
+          <p class="hint">Toggle the select bits. S2 is the most significant bit.</p>
+          <div class="select-controls">
+            <div class="select-bit"><label for="s2">S2 <small>MSB</small></label><button class="bit-toggle select-toggle" id="s2" data-select="2" aria-pressed="0">0</button></div>
+            <div class="select-bit"><label for="s1">S1</label><button class="bit-toggle select-toggle" id="s1" data-select="1" aria-pressed="0">0</button></div>
+            <div class="select-bit"><label for="s0">S0 <small>LSB</small></label><button class="bit-toggle select-toggle" id="s0" data-select="0" aria-pressed="0">0</button></div>
+          </div>
+          <div class="binary-readout"><span>SELECT VALUE</span><strong id="select-binary">000</strong><b id="select-decimal">Channel 0</b></div>
+        </section>
+
+        <section class="panel visual-panel">
+          <div class="panel-title"><div><span class="step">03</span><h3 id="diagram-title">Live circuit diagram</h3></div><span class="live-pill"><i></i> LIVE</span></div>
+          <div class="circuit-wrap">
+            <svg id="circuit-svg" viewBox="0 0 720 390" role="img" aria-label="Interactive multiplexer circuit diagram">
+              <defs>
+                <pattern id="grid" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="1" cy="1" r="1" fill="#dfe5ee"/></pattern>
+              </defs>
+              <rect width="720" height="390" fill="url(#grid)"/>
+              <g id="mux-drawing">
+                <g id="mux-wires"></g>
+                <path d="M250 70 L250 320 Q360 350 470 320 L470 70 Q360 35 250 70Z" fill="#eef3fb" stroke="#526987" stroke-width="3"/>
+                <text x="360" y="178" text-anchor="middle" class="svg-main">8:1</text><text x="360" y="207" text-anchor="middle" class="svg-sub">MULTIPLEXER</text>
+                <text x="360" y="237" text-anchor="middle" class="svg-small">Y = D[selected]</text>
+                <g id="mux-labels"></g>
+                <path d="M360 337 V365" class="select-wire"/><text x="360" y="383" text-anchor="middle" class="svg-small">S2 S1 S0</text>
+                <path d="M470 195 H630" class="wire output-wire"/><circle cx="630" cy="195" r="5" class="node"/><text x="640" y="180" class="svg-small">Y</text>
+              </g>
+              <g id="demux-drawing" hidden>
+                <g id="demux-wires"></g>
+                <path d="M250 70 L250 320 Q360 350 470 320 L470 70 Q360 35 250 70Z" fill="#eef3fb" stroke="#526987" stroke-width="3"/>
+                <text x="360" y="178" text-anchor="middle" class="svg-main">1:8</text><text x="360" y="207" text-anchor="middle" class="svg-sub">DEMULTIPLEXER</text>
+                <text x="360" y="237" text-anchor="middle" class="svg-small">D → selected output</text>
+                <path d="M90 195 H250" class="wire input-wire"/><circle cx="90" cy="195" r="5" class="node"/><text x="55" y="180" class="svg-small">D</text>
+                <path d="M360 337 V365" class="select-wire"/><text x="360" y="383" text-anchor="middle" class="svg-small">S2 S1 S0</text>
+                <g id="demux-labels"></g>
+              </g>
+            </svg>
+          </div>
+          <div class="result-strip" id="mux-result">
+            <div><span>SELECTED INPUT</span><strong id="selected-input">D0</strong></div><div class="result-arrow">→</div><div><span>OUTPUT Y</span><strong class="result-value" id="mux-output">0</strong></div>
+          </div>
+          <div class="result-strip" id="demux-result" hidden>
+            <div><span>ACTIVE OUTPUT</span><strong id="active-output">Y0</strong></div><div class="result-arrow">→</div><div><span>OUTPUT VECTOR Y7…Y0</span><strong class="result-value vector" id="demux-vector">00000000</strong></div>
+          </div>
+          <p class="explanation" id="live-explanation" aria-live="polite">Select channel 0. Input D0 is connected to output Y.</p>
+        </section>
+      </div>
+    </section>
+
+    <section class="truth-section" id="truth-tables">
+      <div class="section-heading"><div><div class="eyebrow">REFERENCE</div><h2>Truth table</h2></div><span class="mini-label">3 SELECT LINES · 8 CHANNELS</span></div>
+      <div class="table-card" id="mux-table-wrap">
+        <h3>8:1 Multiplexer</h3><p class="hint">The output equals the data input addressed by the select lines.</p>
+        <div class="table-scroll"><table><thead><tr><th>S2</th><th>S1</th><th>S0</th><th>Selected input</th><th>Output Y</th></tr></thead><tbody id="mux-table"></tbody></table></div>
+      </div>
+      <div class="table-card" id="demux-table-wrap" hidden>
+        <h3>1:8 Demultiplexer</h3><p class="hint">Only the selected output receives D. All other outputs remain 0.</p>
+        <div class="table-scroll"><table><thead><tr><th>S2</th><th>S1</th><th>S0</th><th>Data D</th><th>Active output</th><th>Y7…Y0</th></tr></thead><tbody id="demux-table"></tbody></table></div>
+      </div>
+    </section>
+
+    <section class="theory-section" id="theory">
+      <div class="eyebrow">UNDERSTAND THE LOGIC</div><h2>How does it work?</h2>
+      <div class="theory-grid">
+        <article class="theory-card"><div class="theory-icon">MUX</div><h3>Multiplexer (MUX)</h3><p>A multiplexer is a data selector. It selects one of many input lines and forwards the selected input to a single output.</p><div class="formula">Y = D<sub>n</sub>, where n = (S2S1S0)<sub>2</sub></div><ul><li>8 data inputs: D0–D7</li><li>3 select lines: S2, S1, S0</li><li>1 output: Y</li></ul></article>
+        <article class="theory-card"><div class="theory-icon">DEMUX</div><h3>Demultiplexer (DEMUX)</h3><p>A demultiplexer is a data distributor. It routes one input to exactly one of several output lines, based on the select inputs.</p><div class="formula">Y<sub>n</sub> = D; all other outputs = 0</div><ul><li>1 data input: D</li><li>3 select lines: S2, S1, S0</li><li>8 outputs: Y0–Y7</li></ul></article>
+      </div>
+      <div class="note"><strong>Remember:</strong> With 3 select lines, the number of selectable channels is 2³ = 8.</div>
+    </section>
+  </main>
+
+  <footer><div class="brand footer-brand"><span class="brand-mark">LL</span><span>LogicLab<small>DIGITAL ELECTRONICS LAB</small></span></div><p>Built for learning digital logic · 8:1 MUX &amp; 1:8 DEMUX</p><a href="https://github.com/" target="_blank" rel="noreferrer">GitHub</a></footer>
+  <script src="script.js"></script>
+</body>
+</html>
