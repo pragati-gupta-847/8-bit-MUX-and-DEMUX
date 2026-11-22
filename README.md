@@ -126,7 +126,10 @@ If you use a different repository name, your published URL will use that name.
 
 ## Author
 
-Add your name, course, institution and academic session here before submission.
+Pragati Gupta(52) Jyoti Gangwar (32) Surya Bharti(70) Ayushi(14)
+
+## Professor Name
+Mrs. Shweta Tiwari
 
 ## License
 
