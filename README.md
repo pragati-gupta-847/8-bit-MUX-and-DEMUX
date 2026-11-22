@@ -4,7 +4,7 @@ An interactive, browser-based digital electronics simulator for learning how an 
 
 ## Live demo
 
-After enabling GitHub Pages, add your published URL here.
+https://pragati-gupta-847.github.io/8-bit-MUX-and-DEMUX/
 
 ## Features
 
